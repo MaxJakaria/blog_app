@@ -19,3 +19,16 @@ samples, guidance on mobile development, and a full API reference.
 ### Extentions
   1. Flutter widgets snippets
   2. Error lense
+
+
+## App Updates
+### Widgets
+###### auth_field
+  HintText, isObscureText, TextEditingController
+
+###### auth_gradient_button
+  Gradient color, Button name
+
+### Pages
+###### signup_page
+  TextEditingController, Form 
