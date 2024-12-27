@@ -19,6 +19,7 @@ samples, guidance on mobile development, and a full API reference.
 ### Extentions
   1. Flutter widgets snippets
   2. Error lense
+  3. Dart data class generator
 
 
 # App Updates
