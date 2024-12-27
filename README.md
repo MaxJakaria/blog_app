@@ -31,4 +31,6 @@ samples, guidance on mobile development, and a full API reference.
 
 ### Pages
 ###### signup_page
-  TextEditingController, Form 
+  TextEditingController, Form, RichText (GestureDetector)
+###### login_page
+  Approximately same as sign_page
