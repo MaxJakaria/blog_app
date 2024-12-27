@@ -21,16 +21,21 @@ samples, guidance on mobile development, and a full API reference.
   2. Error lense
 
 
-## App Updates
+# App Updates
+## Presentation layer
 ### Widgets
-###### auth_field
+###### auth_field.dart
   HintText, isObscureText, TextEditingController
 
-###### auth_gradient_button
+###### auth_gradient_button.dart
   Gradient color, Button name
 
 ### Pages
-###### signup_page
+###### signup_page.dart
   TextEditingController, Form, RichText (GestureDetector)
-###### login_page
+###### login_page.dart
   Approximately same as sign_page
+
+## Domain layer
+### repository
+###### auth_repository.dart
