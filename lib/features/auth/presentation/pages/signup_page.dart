@@ -70,9 +70,9 @@ class _SignupPageState extends State<SignupPage> {
                   if (formKey.currentState!.validate()) {
                     context.read<AuthBloc>().add(
                           AuthSignUp(
-                            email: emailController.text,
-                            password: password,
-                            name: name,
+                            email: emailController.text.trim(),
+                            password: passwordController.text.trim(),
+                            name: nameController.text.trim(),
                           ),
                         );
                   }

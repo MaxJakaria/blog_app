@@ -14,7 +14,8 @@ abstract interface class AuthRemoteDataSource {
 }
 
 class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
-  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  final FirebaseAuth firebaseAuth;
+  AuthRemoteDataSourceImplementation(this.firebaseAuth);
   @override
   Future<String> loginWithEmailPassword({
     required String email,
@@ -35,6 +36,9 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
         email: email,
         password: password,
       );
+
+      // Update the user's display name
+      await response.user!.updateDisplayName(name);
 
       if (response.user == null) {
         throw const ServerException('User is null');
