@@ -20,6 +20,7 @@ samples, guidance on mobile development, and a full API reference.
   1. Flutter widgets snippets
   2. Error lense
   3. Dart data class generator
+  4. Block
 
 
 # App Updates
@@ -36,6 +37,9 @@ samples, guidance on mobile development, and a full API reference.
   TextEditingController, Form, RichText (GestureDetector)
 ###### login_page.dart
   Approximately same as sign_page
+
+### Bloc
+  Control error or success.
 
 ## Domain layer
 ### repository
