@@ -40,3 +40,11 @@ samples, guidance on mobile development, and a full API reference.
 ## Domain layer
 ### repository
 ###### auth_repository.dart
+
+## Data layer
+### Data sources
+###### auth_romote_data_source.dart
+
+### Repositories
+#### Use Cases
+###### user_sign_up.dart
