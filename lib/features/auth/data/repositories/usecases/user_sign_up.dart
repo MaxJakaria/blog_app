@@ -1,14 +1,15 @@
 import 'package:blog_app/core/theme/error/failures.dart';
 import 'package:blog_app/core/theme/usecase/usecase.dart';
 import 'package:blog_app/features/auth/domain/repository/auth_repository.dart';
+import 'package:blog_app/features/auth/domain/repository/entities/user.dart';
 import 'package:fpdart/src/either.dart';
 
-class UserSignUp implements Usecase<String, UserSignUpParams> {
+class UserSignUp implements Usecase<User, UserSignUpParams> {
   final AuthRepository authRepository;
-  const UserSignUp(this.authRepository);
+  const UserSignUp({required this.authRepository});
 
   @override
-  Future<Either<Failure, String>> call(UserSignUpParams params) async {
+  Future<Either<Failure, User>> call(UserSignUpParams params) async {
     return await authRepository.signUpWithEmailPassword(
       name: params.name,
       email: params.email,

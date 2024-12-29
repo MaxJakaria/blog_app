@@ -1,13 +1,15 @@
 import 'package:blog_app/core/theme/error/exceptions.dart';
+import 'package:blog_app/features/auth/data/model/user_model.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract interface class AuthRemoteDataSource {
-  Future<String> signUpWithEmailPassword({
+  Future<UserModel> signUpWithEmailPassword({
     required String name,
     required String email,
     required String password,
   });
-  Future<String> loginWithEmailPassword({
+  Future<UserModel> loginWithEmailPassword({
     required String email,
     required String password,
   });
@@ -15,9 +17,15 @@ abstract interface class AuthRemoteDataSource {
 
 class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
   final FirebaseAuth firebaseAuth;
-  AuthRemoteDataSourceImplementation(this.firebaseAuth);
+  final FirebaseFirestore firebaseFirestore;
+
+  AuthRemoteDataSourceImplementation({
+    required this.firebaseAuth,
+    required this.firebaseFirestore,
+  });
+
   @override
-  Future<String> loginWithEmailPassword({
+  Future<UserModel> loginWithEmailPassword({
     required String email,
     required String password,
   }) {
@@ -26,7 +34,7 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
   }
 
   @override
-  Future<String> signUpWithEmailPassword({
+  Future<UserModel> signUpWithEmailPassword({
     required String name,
     required String email,
     required String password,
@@ -37,14 +45,24 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
         password: password,
       );
 
-      // Update the user's display name
-      await response.user!.updateDisplayName(name);
-
       if (response.user == null) {
         throw const ServerException('User is null');
+      } else {
+        await firebaseFirestore
+            .collection('users')
+            .doc(response.user!.uid)
+            .set({
+          'name': name,
+          'email': email,
+          'createdAt': FieldValue.serverTimestamp(),
+        });
       }
 
-      return response.user!.uid;
+      return UserModel.fromJson({
+        'uid': response.user!.uid,
+        'email': response.user!.email,
+        'name': name,
+      });
     } catch (e) {
       throw ServerException(e.toString());
     }
