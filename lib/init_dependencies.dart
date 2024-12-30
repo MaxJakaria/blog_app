@@ -20,14 +20,18 @@ Future<void> initDependencies() async {
 Future<void> _initFirebase() async {
   final firebaseAuth = FirebaseAuth.instance;
   final firebaseFirestore = FirebaseFirestore.instance;
-  serviceLocator.registerLazySingleton(() => firebaseAuth);
-  serviceLocator.registerLazySingleton(() => firebaseFirestore);
+  // Register Firebase services
+  if (!serviceLocator.isRegistered<FirebaseAuth>()) {
+    serviceLocator.registerLazySingleton(() => firebaseAuth);
+  }
+  if (!serviceLocator.isRegistered<FirebaseFirestore>()) {
+    serviceLocator.registerLazySingleton(() => firebaseFirestore);
+  }
 
-  // Core
-  serviceLocator.registerLazySingleton(
-    () => AppUserCubit(),
-  );
-  serviceLocator.registerLazySingleton(() => AppUserCubit());
+  // Register AppUserCubit conditionally
+  if (!serviceLocator.isRegistered<AppUserCubit>()) {
+    serviceLocator.registerLazySingleton(() => AppUserCubit());
+  }
 }
 
 void _initAuth() {
