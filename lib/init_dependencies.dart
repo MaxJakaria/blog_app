@@ -1,5 +1,6 @@
 import 'package:blog_app/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:blog_app/features/auth/data/repositories/auth_repository_implementation.dart';
+import 'package:blog_app/features/auth/domain/usecases/current_user.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_login.dart';
 import 'package:blog_app/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:blog_app/features/auth/domain/repository/auth_repository.dart';
@@ -23,34 +24,42 @@ Future<void> _initFirebase() async {
 }
 
 void _initAuth() {
-  serviceLocator.registerFactory<AuthRemoteDataSource>(
+  // Datasource
+  serviceLocator
+    ..registerFactory<AuthRemoteDataSource>(
       () => AuthRemoteDataSourceImplementation(
-            firebaseAuth: serviceLocator(),
-            firebaseFirestore: serviceLocator(),
-          ));
-
-  serviceLocator.registerFactory<AuthRepository>(
-    () => AuthRepositoryImplementation(
-      remoteDataSource: serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerFactory(
-    () => UserSignUp(
-      authRepository: serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerFactory(
-    () => UserLogin(
-      authRepository: serviceLocator(),
-    ),
-  );
-
-  serviceLocator.registerLazySingleton(
-    () => AuthBloc(
-      userSignUp: serviceLocator(),
-      userLogin: serviceLocator(),
-    ),
-  );
+        firebaseAuth: serviceLocator(),
+        firebaseFirestore: serviceLocator(),
+      ),
+    )
+    // Repository
+    ..registerFactory<AuthRepository>(
+      () => AuthRepositoryImplementation(
+        remoteDataSource: serviceLocator(),
+      ),
+    )
+    // Usecases
+    ..registerFactory(
+      () => UserSignUp(
+        authRepository: serviceLocator(),
+      ),
+    )
+    ..registerFactory(
+      () => UserLogin(
+        authRepository: serviceLocator(),
+      ),
+    )
+    ..registerFactory(
+      () => CurrentUser(
+        authRepository: serviceLocator(),
+      ),
+    )
+    // Bloc
+    ..registerLazySingleton(
+      () => AuthBloc(
+        userSignUp: serviceLocator(),
+        userLogin: serviceLocator(),
+        currentUser: serviceLocator(),
+      ),
+    );
 }

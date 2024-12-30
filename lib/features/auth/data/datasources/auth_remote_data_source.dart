@@ -13,6 +13,8 @@ abstract interface class AuthRemoteDataSource {
     required String email,
     required String password,
   });
+
+  Future<UserModel?> getCurrentUserData();
 }
 
 class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
@@ -77,6 +79,26 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
         'email': response.user!.email,
         'name': name,
       });
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<UserModel?> getCurrentUserData() async {
+    try {
+      final currentUser = firebaseAuth.currentUser;
+      if (currentUser != null) {
+        final userData = await firebaseFirestore
+            .collection('users')
+            .doc(currentUser.uid)
+            .get();
+
+        return UserModel.fromJson(userData.data()!).copyWith(
+          email: currentUser.email,
+        );
+      }
+      return null;
     } catch (e) {
       throw ServerException(e.toString());
     }
