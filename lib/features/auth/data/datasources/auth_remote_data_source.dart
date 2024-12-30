@@ -1,4 +1,4 @@
-import 'package:blog_app/core/theme/error/exceptions.dart';
+import 'package:blog_app/core/error/exceptions.dart';
 import 'package:blog_app/features/auth/data/model/user_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

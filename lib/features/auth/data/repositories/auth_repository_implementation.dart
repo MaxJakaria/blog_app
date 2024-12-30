@@ -1,8 +1,8 @@
-import 'package:blog_app/core/theme/error/exceptions.dart';
-import 'package:blog_app/core/theme/error/failures.dart';
+import 'package:blog_app/core/error/exceptions.dart';
+import 'package:blog_app/core/error/failures.dart';
 import 'package:blog_app/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:blog_app/features/auth/domain/repository/auth_repository.dart';
-import 'package:blog_app/features/auth/domain/repository/entities/user.dart';
+import 'package:blog_app/core/common/entities/user.dart';
 import 'package:firebase_auth/firebase_auth.dart' as fb;
 import 'package:fpdart/src/either.dart';
 
