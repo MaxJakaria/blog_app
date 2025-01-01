@@ -7,8 +7,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 
 abstract class BlogRemoteDataSource {
   Future<BlogModel> uploadBlog(BlogModel blog);
-  Future<String> uploadBlogImage(
-      {required File image, required BlogModel blog});
+  Future<String> uploadBlogImage({
+    required File image,
+    required BlogModel blog,
+  });
+  Future<List<BlogModel>> getAllBlogs();
 }
 
 class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
@@ -42,6 +45,23 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
   }) async {
     try {
       return 'images/blog_image.jpg';
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<List<BlogModel>> getAllBlogs() async {
+    try {
+      final blogs = await firebaseFirestore.collection('blogs').get();
+      final List<QueryDocumentSnapshot<Map<String, dynamic>>> blogsData =
+          blogs.docs;
+      return blogsData
+          .map(
+            (blog) =>
+                BlogModel.fromJson(blog.data()).copyWith(posterName: 'Jakaria'),
+          )
+          .toList();
     } catch (e) {
       throw ServerException(e.toString());
     }
