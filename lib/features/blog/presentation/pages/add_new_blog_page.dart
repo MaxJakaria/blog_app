@@ -117,14 +117,14 @@ class _AddNewBlogPageState extends State<AddNewBlogPage> {
                             onTap: selectImage,
                             child: DottedBorder(
                               color: AppPallete.borderColor,
-                              dashPattern: [20, 4],
+                              dashPattern: const [20, 4],
                               radius: const Radius.circular(10),
                               borderType: BorderType.RRect,
                               strokeCap: StrokeCap.round,
-                              child: Container(
+                              child: const SizedBox(
                                 height: 150,
                                 width: double.infinity,
-                                child: const Column(
+                                child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(
