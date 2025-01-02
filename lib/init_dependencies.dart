@@ -1,4 +1,5 @@
 import 'package:blog_app/core/common/cubits/app_user/app_user_cubit.dart';
+import 'package:blog_app/core/network/connection_checker.dart';
 import 'package:blog_app/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:blog_app/features/auth/data/repositories/auth_repository_implementation.dart';
 import 'package:blog_app/features/auth/domain/usecases/current_user.dart';
@@ -16,6 +17,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:internet_connection_checker_plus/internet_connection_checker_plus.dart';
 
 final serviceLocator = GetIt.instance;
 
@@ -23,6 +26,16 @@ Future<void> initDependencies() async {
   await _initFirebase();
   _initAuth();
   _initBlog();
+
+  serviceLocator.registerFactory(
+    () => InternetConnection(),
+  );
+
+  serviceLocator.registerFactory<ConnectionChecker>(
+    () => ConnectionCheckerImpl(
+      internetConnection: serviceLocator(),
+    ),
+  );
 }
 
 Future<void> _initFirebase() async {
@@ -32,18 +45,26 @@ Future<void> _initFirebase() async {
 
   // Register Firebase services
   if (!serviceLocator.isRegistered<FirebaseAuth>()) {
-    serviceLocator.registerLazySingleton(() => firebaseAuth);
+    serviceLocator.registerLazySingleton(
+      () => firebaseAuth,
+    );
   }
   if (!serviceLocator.isRegistered<FirebaseFirestore>()) {
-    serviceLocator.registerLazySingleton(() => firebaseFirestore);
+    serviceLocator.registerLazySingleton(
+      () => firebaseFirestore,
+    );
   }
   if (!serviceLocator.isRegistered<FirebaseStorage>()) {
-    serviceLocator.registerLazySingleton(() => firebaseStorage);
+    serviceLocator.registerLazySingleton(
+      () => firebaseStorage,
+    );
   }
 
   // Register AppUserCubit conditionally
   if (!serviceLocator.isRegistered<AppUserCubit>()) {
-    serviceLocator.registerLazySingleton(() => AppUserCubit());
+    serviceLocator.registerLazySingleton(
+      () => AppUserCubit(),
+    );
   }
 }
 
@@ -60,6 +81,7 @@ void _initAuth() {
     ..registerFactory<AuthRepository>(
       () => AuthRepositoryImplementation(
         remoteDataSource: serviceLocator(),
+        connectionChecker: serviceLocator(),
       ),
     )
     // Usecases
