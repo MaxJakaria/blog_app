@@ -4,6 +4,7 @@ import 'package:blog_app/features/blog/data/models/blog_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:postgrest/postgrest.dart';
 
 abstract class BlogRemoteDataSource {
   Future<BlogModel> uploadBlog(BlogModel blog);
@@ -33,6 +34,8 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
           .doc(blog.id)
           .set(blog.toJson());
       return blog;
+    } on PostgrestException catch (e) {
+      throw ServerException(e.message);
     } catch (e) {
       throw ServerException(e.toString());
     }
@@ -62,6 +65,8 @@ class BlogRemoteDataSourceImpl implements BlogRemoteDataSource {
                 BlogModel.fromJson(blog.data()).copyWith(posterName: 'Jakaria'),
           )
           .toList();
+    } on PostgrestException catch (e) {
+      throw ServerException(e.message);
     } catch (e) {
       throw ServerException(e.toString());
     }

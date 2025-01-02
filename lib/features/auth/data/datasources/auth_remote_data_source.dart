@@ -44,6 +44,8 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
         'uid': response.user!.uid,
         'email': response.user!.email,
       });
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(e.message.toString());
     } catch (e) {
       throw ServerException(e.toString());
     }
@@ -79,6 +81,8 @@ class AuthRemoteDataSourceImplementation implements AuthRemoteDataSource {
         'email': response.user!.email,
         'name': name,
       });
+    } on FirebaseAuthException catch (e) {
+      throw ServerException(e.message.toString());
     } catch (e) {
       throw ServerException(e.toString());
     }

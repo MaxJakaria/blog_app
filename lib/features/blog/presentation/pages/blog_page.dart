@@ -31,6 +31,7 @@ class _BlogPageState extends State<BlogPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Blog App'),
+        centerTitle: true,
         actions: [
           IconButton(
             onPressed: () {
